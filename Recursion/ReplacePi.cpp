@@ -8,12 +8,16 @@ void replacePi(char a[], int i){
     }
 
     //Recursive case
+    //finding pi
     if(a[i] == 'p' && a[i+1] == 'i'){
         int j = i+2;
+
+        //iterating towards end of array
         while(a[j] != '\0'){
             j++;
         }
 
+        //shifting data
         while(j >= i+2){
             a[j+2] = a[j];
             j--;
