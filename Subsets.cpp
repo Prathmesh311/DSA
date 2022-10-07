@@ -20,7 +20,6 @@ public:
         //Backtracking
         subset.pop_back();
         
-        
         return;
     }
     
