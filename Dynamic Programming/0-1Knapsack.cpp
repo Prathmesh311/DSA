@@ -17,11 +17,11 @@ int knapsack(int weights[], int prices[], int (&dp)[100][100],int bagSize, int n
     if(bagSize >= weights[n]){
         int include = prices[n] + knapsack(weights, prices, dp, bagSize - weights[n], n-1);
         int exclude = knapsack(weights, prices, dp, bagSize, n-1);
-        return max(include, exclude);
+        return dp[bagSize][n] =  max(include, exclude);
     }
 
     if(bagSize < weights[n]){
-        return knapsack(weights, prices, dp, bagSize, n-1);
+        return dp[bagSize][n] = knapsack(weights, prices, dp, bagSize, n-1);
     }
 
 }
