@@ -2,7 +2,8 @@
     "files.associations": {
         "ostream": "cpp",
         "iostream": "cpp",
-        "map": "cpp"
+        "map": "cpp",
+        "new": "cpp"
     },
     "C_Cpp.errorSquiggles": "Disabled"
 }
