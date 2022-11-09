@@ -18,7 +18,7 @@ class Graph{
             visited[node] = true;
 
             for(int nbr : adj[node]){
-                if(!visited[nbr]){
+                if(!visited[nbr]){                              //DFS on not visited nbr nodes
                     if(cycleFinder(nbr, visited, node)){
                         return true;
                     }
