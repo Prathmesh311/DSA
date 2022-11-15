@@ -17,25 +17,36 @@ class Graph{
                 return i;
             }
 
-            return findSet(parent[i], parent);
+            //Path compressions Optimisation
+            return parent[i] =  findSet(parent[i], parent);
         }
 
 
-        void unionSet(int i, int j, int parent[]){
+        void unionSet(int i, int j, int *parent, int *rank){
             int s1 = findSet(i, parent);
             int s2 = findSet(j, parent);
 
+            //Union By Rank Optimization 
             if(s1 != s2){
-                parent[s2] = s1;
+                if(rank[s1] < rank[s2]){
+                    parent[s1] = s2;
+                    rank[s2] += rank[s1];
+                }
+                else{
+                    parent[s2] = s1;
+                    rank[s1] += rank[s2];
+                }
             }
         }
 
         bool containsCycle(){
 
             int *parent =new int[100];
+            int *rank = new int[100];
 
             for(int i=0; i < 100; i++){
                 parent[i] = -1;
+                rank[i] = 1;
             }
 
 
@@ -44,7 +55,7 @@ class Graph{
                 int s2 = findSet(p.second, parent);
 
                 if(s1 != s2){
-                    unionSet(s1, s2, parent);
+                    unionSet(s1, s2, parent, rank);
                 }
                 else
                 {
@@ -64,7 +75,7 @@ int main(){
     g.addEdge(0,1);
     g.addEdge(1,2);
     g.addEdge(2,3);
-    g.addEdge(3,0);
+    //g.addEdge(3,0);
    
     
 
