@@ -5,7 +5,8 @@
         "map": "cpp",
         "new": "cpp",
         "*.tcc": "cpp",
-        "list": "cpp"
+        "list": "cpp",
+        "vector": "cpp"
     },
     "C_Cpp.errorSquiggles": "Disabled"
 }
