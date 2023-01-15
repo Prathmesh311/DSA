@@ -74,7 +74,7 @@ int main(){
     Node* newNode = new Node(10);
     Node* head = newNode;
     printLL(head);
-    
+
     insertAtHead(head, 12);
     printLL(head);
 
