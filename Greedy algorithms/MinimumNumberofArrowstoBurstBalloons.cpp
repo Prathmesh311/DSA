@@ -5,14 +5,7 @@ public:
     }
     
     int findMinArrowShots(vector<vector<int>>& events) {
-        if(events.size() == 1){
-            return 1;
-        }
         sort(events.begin(), events.end(), compare);
-
-        for(int i=0;i < events.size(); i++){
-            cout<<events[i][0]<<" "<<events[i][1]<<endl;
-        }
 
         int counter = 1;
         int lastEnd = events[0][1];
