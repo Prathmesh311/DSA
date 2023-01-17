@@ -2,13 +2,13 @@
 #include<vector>
 using namespace std;
 
-
+template<typename T>
 class Stack{
-    private:
-    vector<int> v;
+private:
+    vector<T> v;
 
-    public:
-    void push(int data){
+public:
+    void push(T data){
         v.push_back(data);
     }
 
@@ -22,13 +22,13 @@ class Stack{
         }
     }
 
-    int top(){
+    T top(){
         return v[v.size()-1];
     }
 };
 
 int main(){
-    Stack s;
+    Stack<int> s;
 
     for(int i=0;i < 5; i++){
         s.push(i);
