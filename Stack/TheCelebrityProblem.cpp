@@ -14,7 +14,6 @@ class Solution
             s.push(i);
         }
         
-        
         while(s.size() != 1){
             int num1 = s.top();   //everytime pop 2 elements from stack
             s.pop();
@@ -34,17 +33,15 @@ class Solution
         for(int i=0;i < n; i++){       //check if element is celebrity or not
             if(i == celebrity){
                 continue;
-            }
             
+            }
             if(M[i][celebrity] != 1){  
                 return -1;
             }
-            
             if(M[celebrity][i] != 0){
                 return -1;
             }
         }
-        
         
         return celebrity;
     }
