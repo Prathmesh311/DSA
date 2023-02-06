@@ -18,6 +18,17 @@ int setBit(int n, int i){
     return (n | mask);
 }
 
+void clearBit(int &n, int i){
+    int mask = ~(1<<i);
+    n = n & mask;
+}
+
+void updateBit(int &n, int i, int v){
+    int mask = ~(1<<i);
+    int cleared_n = n & mask;
+    n = cleared_n | (v<<i);
+}
+
 int main(){  
     int n = 5;
     int i;
@@ -25,6 +36,13 @@ int main(){
 
     cout<<getBit(n, i)<<endl;
     cout<<setBit(n, i)<<endl;
+
+    clearBit(n, i);
+    cout<<n<<endl;
+
+    updateBit(n, 2, 0);
+    updateBit(n, 3, 1);
+    cout<<n<<endl;;
 
 
     return 0;
