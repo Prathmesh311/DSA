@@ -25,4 +25,22 @@ public:
         return maximumPorfit;
         
     }
+    
+    //Simpler method
+    int maxProfit(vector<int>& prices) {
+        int maximumProfit = 0;
+
+
+        int minVal = prices[0];
+        for(int i=1; i < prices.size(); i++){
+            if(prices[i] > minVal){
+                maximumProfit = max(maximumProfit, prices[i] - minVal);
+            }
+            else{
+                minVal = min(minVal, prices[i]);
+            }
+        }
+        
+        return maximumProfit;
+    }
 };
