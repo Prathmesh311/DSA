@@ -1,43 +1,26 @@
 class Solution {
 public:
-    
-    int coinChange2(vector<int>& coins, int dp[][5001], int i, int amount){
-        //Base case
-        if( amount == 0){
-           
+    int coinComb(vector<int>& coins, vector<vector<int>>& dp, int index, int amount){
+        if(amount == 0){
             return 1;
         }
-        
-        if(i >= coins.size()){
+
+        if(amount < 0 || index >= coins.size()){
             return 0;
         }
-      
-        
-        if(dp[i][amount] != 0){
-            return dp[i][amount];
+
+        if(dp[index][amount] != -1){
+            return dp[index][amount];
         }
-        
-        //Recursive case
-        int inc=0;
-        int exc=0;
-        
-        if(amount - coins[i] >= 0){
-             
-            inc = coinChange2(coins, dp, i, amount - coins[i]);
-            exc = coinChange2(coins, dp, i+1, amount);
-            return dp[i][amount] = inc + exc;
-               
-        }else{
-            exc = coinChange2(coins, dp, i+1, amount);
-            return dp[i][amount] = inc + exc;
-        }
-      
-        
+
+        dp[index][amount] = coinComb(coins, dp, index, amount - coins[index]) + 
+                            coinComb(coins, dp, index+1, amount);
+
+        return dp[index][amount];
     }
-    
+
     int change(int amount, vector<int>& coins) {
-        int dp[301][5001] = {0};
-       
-        return coinChange2(coins, dp, 0, amount);
+        vector<vector<int>> dp(301, vector<int>(5001, -1));
+        return coinComb(coins, dp, 0, amount);
     }
 };
