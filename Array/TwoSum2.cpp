@@ -12,7 +12,7 @@ public:
             }
           
             if(map.find(nums[i]) == map.end()){
-                map.insert(make_pair(nums[i], i+1));
+                map[nums[i]] = i+1;
             }
         }
         
