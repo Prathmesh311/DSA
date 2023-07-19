@@ -21,7 +21,6 @@ public:
                 end = mid-1;
             }
         }
-
         return (int)sRoot;
     }
 };
