@@ -1,35 +1,27 @@
-#include <iostream>
-using namespace std;
-
-int LIS(int arr[], int size){
-    int dp[size] = {0};
-    dp[0] = 1;
-
-    int longestSoFar = 0;
-    for(int i=1; i < size; i++){
-        int currLongest = 0;
-        for(int j=0; j < i; j++){
-           
-            if(arr[j] < arr[i]){
-                currLongest = max(dp[j], currLongest);
-            }
+class Solution {
+public:
+    int dfs(vector<int>& nums, int curr, int prev, vector<vector<int>> &dp){
+        if(curr == nums.size()){
+            return 0;
         }
-        longestSoFar = max(currLongest+1, longestSoFar);
-        dp[i] = currLongest + 1;
+
+        if(dp[curr][prev+1] != -1){
+            return dp[curr][prev+1];
+        }
+
+        int include = 0;
+        if(prev == -1 || nums[prev] < nums[curr]){
+            include = 1 + dfs(nums, curr+1, curr, dp);
+        }
+
+        int exclude = dfs(nums, curr+1, prev, dp);
+
+        return dp[curr][prev+1] = max(include, exclude);
     }
-  
-    return longestSoFar;
-}
 
 
-int main()
-{
-    int arr[] = {1, 5, 2, 3, 4, 9, 6, 10};
-
-    int size = sizeof(arr) / sizeof(int);
-
-    cout<<LIS(arr, size);
-
-   
-    return 0;
-}
+    int lengthOfLIS(vector<int>& nums) {
+        vector<vector<int>> dp(nums.size(), vector<int>(nums.size(), -1));
+        return dfs(nums, 0, -1, dp);
+    }
+};
