@@ -28,4 +28,28 @@ public:
         
         return tempSpan;
     }
+
+    //Easier method faster than above method
+    vector<int> dailyTemperatures(vector<int>& temperatures) {
+        int n = temperatures.size();
+        vector<int> ans(n, 0);
+        stack<int> stack;
+
+        stack.push(0);
+
+        for(int i=1; i < n; i++){
+           
+            while(!stack.empty() && temperatures[i] > temperatures[stack.top()]){
+                ans[stack.top()] = i - stack.top();
+                stack.pop();
+            }
+
+
+            stack.push(i);
+        }
+
+        return ans;
+    }
 };
+
+
