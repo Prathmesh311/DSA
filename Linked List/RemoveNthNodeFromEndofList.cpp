@@ -10,6 +10,29 @@
  */
 class Solution {
 public:
+    //approach 1: fast-slow pointer (2 pointer) / 100% faster
+    ListNode* removeNthFromEnd(ListNode* head, int n) {
+        ListNode* dummy = new ListNode();
+        dummy->next = head;
+        ListNode* slow = dummy;
+        ListNode* fast = dummy;
+
+        while(n > 0){
+            fast = fast->next;
+            n--;
+        }
+
+        while(fast->next != NULL){
+            fast = fast->next;
+            slow = slow->next;
+        }
+
+        slow->next = slow->next->next;
+
+        return dummy->next;
+    }
+
+    //approach 2: recursive - slower
     int removeNthElement(ListNode* head, int n){
         if(head == NULL){       //If reach at last of LL return
             return n;
