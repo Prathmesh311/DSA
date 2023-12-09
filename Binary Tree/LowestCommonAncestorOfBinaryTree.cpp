@@ -30,4 +30,42 @@ public:
         }
         return rightVal;
     }
+
+    //This method makes sure that both nodes are present in the tree. above method assumes that they are present
+    TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q) {
+        if(root == NULL){
+            return NULL;
+        }
+
+        TreeNode* left = lowestCommonAncestor(root->left, p, q);
+        TreeNode* right = lowestCommonAncestor(root->right, p, q);
+
+
+        if(left != NULL && right != NULL){
+            return root;
+        }
+
+        if((left == p || right == p) && root == q){
+            return q;
+        }
+        if((left == q || right == q) && root == p){
+            return p;
+        }
+
+        if(root == p){
+            return root;
+        }
+        if(root == q){
+            return root;
+        }
+
+        if(left != NULL){
+            return left;
+        }
+        if(right != NULL){
+            return right;
+        }
+
+        return NULL;
+    }
 };
