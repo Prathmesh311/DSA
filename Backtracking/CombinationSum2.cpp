@@ -1,44 +1,35 @@
 class Solution {
 public:
-    int t;
-     void combinations(vector<int>& candidates, set<vector<int>>& ans, vector<int>& comb, int target, int i, int n){
-        //Base case
-        if(target == 0){
-            int val=0;
-            for(int i=0; i < comb.size(); i++){
-                val += comb[i];
-            }
-            if(val == t){
-                std::sort(comb.begin(),comb.end());
-                ans.insert(comb);
+    void findSets(vector<int>& nums, vector<vector<int>> &sets, vector<int> &tempVec, int index, int target){
+        if(target <= 0 || index >= nums.size()){
+            if(target == 0){
+                sets.push_back(tempVec);
             }
             return;
         }
-        if( i >= n || target < 0){
-            
-            return;
+
+        int prev = -1;
+
+        for(int i = index; i < nums.size(); i++){
+            if(nums[i] == prev){
+                continue;
+            }
+            tempVec.push_back(nums[i]);
+            findSets(nums, sets, tempVec, i+1, target-nums[i]);
+            tempVec.pop_back();
+            prev = nums[i];
         }
-        
-        
-        //Recursive case
-        if(target >= candidates[i]){
-            comb.push_back(candidates[i]);
-            combinations(candidates, ans,comb, target - candidates[i], i+1, n);
-            comb.pop_back();
-           
-        }
-        
-            combinations(candidates, ans, comb, target, i+1, n);
-       
-        
     }
+
+
     vector<vector<int>> combinationSum2(vector<int>& candidates, int target) {
-        set<vector<int>> ans;
-        vector<int> comb;
-        t = target;
-        combinations(candidates, ans, comb, target, 0, candidates.size());
-        std::vector<vector<int>> v(ans.begin(), ans.end());
-       
-        return v;
+        vector<vector<int>> sets;
+        vector<int> tempVec;
+
+        sort(candidates.begin(), candidates.end());
+
+        findSets(candidates, sets, tempVec, 0, target);
+        
+        return sets;
     }
 };
