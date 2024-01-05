@@ -1,61 +1,48 @@
 class Solution {
 public:
-    
-    bool wordSearch(vector<vector<char>>& mat,string word, int i, int j, int s){
-        //Base case
-        if(mat[i][j] == word[s] && word[s+1] == '\0'){
-            return true;
-        }
-        
-        
-        if(mat[i][j] != word[s]){
+
+    bool traversal(vector<vector<char>>& board, vector<vector<int>> &visited, string word, int index, int row, int col){
+        if(row < 0 || col < 0 || row >= board.size() || col >= board[0].size()){
             return false;
         }
-        
-        //Mark Element as visited
-        mat[i][j] = '#';
-        
-        //Recursive case
-        bool left = false, right=false, up=false, down=false;
-        
-        if(j > 0){
-            left = wordSearch(mat, word,  i, j-1, s+1);
+
+        if(visited[row][col] == 1){
+            return false;
         }
-        
-        if(j < mat[0].size()-1 ){
-            right = wordSearch(mat, word,   i, j+1, s+1);   
+
+        if(index == word.size()-1 && board[row][col] == word[index]){
+            return true;
         }
-        
-        if(i > 0 ){ 
-            up = wordSearch(mat, word,  i-1, j, s+1);           
+
+        visited[row][col] = 1;
+
+        if(board[row][col] == word[index]){
+            bool isPresent =  traversal(board, visited, word, index+1, row+1, col) || 
+                                traversal(board, visited, word, index+1, row-1, col) ||
+                                traversal(board, visited, word, index+1, row, col+1) ||
+                                traversal(board, visited, word, index+1, row, col-1);
+
+            visited[row][col] = 0;
+            return isPresent;
+
         }
-        
-        if(i < mat.size()-1){    
-            down = wordSearch(mat, word,  i+1, j, s+1);       
-        }
-        
-        mat[i][j] = word[s];
-        
-        return left || right || up || down;
+
+        visited[row][col] = 0;
+        return false;
     }
-    
-    
+
     bool exist(vector<vector<char>>& board, string word) {
-        
-        bool ans = false;
-       
-        vector<string> path;
-         for(int i=0; i < board.size(); i++){
+        vector<vector<int>> visited(board.size(), vector<int>(board[0].size(), 0));
+
+
+        for(int i=0; i < board.size(); i++){
             for(int j=0; j < board[0].size(); j++){
-                if(board[i][j] == word[0]){  
-                   if(wordSearch(board, word, i, j, 0)){
-                       return true;
-                   }
-                   
+                if(board[i][j] == word[0] && traversal(board, visited, word, 0, i, j)){
+                    return true;
                 }
             }
         }
-        
-        return ans;
+
+        return false;
     }
 };
