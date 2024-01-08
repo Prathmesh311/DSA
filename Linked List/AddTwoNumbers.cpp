@@ -59,4 +59,54 @@ public:
 
         return reverse(headAns->next, NULL);
     }
+
+    //Method2: faster than reverse method 90% faster
+    ListNode* addTwoNumbers(ListNode* list1, ListNode* list2) {
+        ListNode *head = new ListNode();
+        ListNode *currNode = head;
+
+        int carry = 0;
+
+        while(list1 != NULL && list2 != NULL){
+            int value = list1->val + list2->val + carry;
+            int currVal = value % 10;
+            carry = value / 10;
+
+            ListNode *newNode = new ListNode(currVal);
+            currNode->next = newNode;
+            currNode = currNode->next;
+            list2 = list2->next;
+            list1 = list1->next;
+            
+        }
+
+        while(list1 != NULL){
+            int value = list1->val + carry;
+            int currVal = value % 10;
+            carry = value / 10;
+
+            ListNode *newNode = new ListNode(currVal);
+            currNode->next = newNode;
+            currNode = currNode->next;
+            list1 = list1->next;
+        }
+
+        while(list2 != NULL){
+            int value = list2->val + carry;
+            int currVal = value % 10;
+            carry = value / 10;
+
+            ListNode *newNode = new ListNode(currVal);
+            currNode->next = newNode;
+            currNode = currNode->next;
+            list2 = list2->next;
+        }
+
+        if(carry > 0){
+            ListNode *newNode = new ListNode(carry);
+            currNode->next = newNode;
+        }
+
+        return head->next;
+    }
 };
