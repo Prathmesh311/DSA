@@ -1,74 +1,57 @@
 class Solution {
 public:
-    vector<int> nextSmallerElement(vector<int>& heights, int n) {
-        vector<int> nextSmaller(heights.size());
-
-        stack<int> s;
-       
-        for(int i=heights.size()-1; i >= 0; i--){
-            int curr = heights[i];
-            while(!s.empty() && heights[s.top()] >= curr){    //poping stack until next smaller element found
-                s.pop();
-            }
-
-            if(s.empty()){
-                nextSmaller[i] = -1;
-            }else{
-                nextSmaller[i] = s.top();                    //Storing next smaller elements index
-            }
-
-            s.push(i);                           
-        }
-
-        return nextSmaller;
-    }
-
-    vector<int> prevSmallerElement(vector<int>& heights, int n) {
-        vector<int> nextSmaller(heights.size());
-
-        stack<int> s;
-       
-        for(int i=0; i <= heights.size()-1; i++){
-            int curr = heights[i];
-            while(!s.empty() && heights[s.top()] >= curr){    //poping stack until next smaller element found
-                s.pop();
-            }
-
-            if(s.empty()){
-                nextSmaller[i] = -1;
-            }else{
-                nextSmaller[i] = s.top();                     //Storing next smaller elements index
-            }
-
-            s.push(i);                           
-        }
-
-        return nextSmaller;
-    }
     int largestRectangleArea(vector<int>& heights) {
-        int n = heights.size();
+        stack<pair<int, int>> stack;
+        int globalMin = heights[0];
+        int maxArea = 0;
+        int len = heights.size();
 
-        vector<int> prev;
-        prev = prevSmallerElement(heights, n);
+        //Method 1 : Optimal Method using Stack
+        for(int i = 0; i < heights.size(); i++){
+            int start = i;
 
-        vector<int> next;
-        next = nextSmallerElement(heights, n);
-
-
-        int maxArea = INT_MIN;
-        for(int i=0; i < n; i++){
-            int l = heights[i];
-
-            if(next[i] == -1){
-                next[i] = n;
+            while(!stack.empty() && heights[i] <= stack.top().second){
+                pair<int, int> p = stack.top();
+                stack.pop();
+                maxArea = max(maxArea, (i-p.first) * p.second);
+                start = p.first;
             }
 
-            int b = next[i] - prev[i] - 1;
-
-            int newArea = l * b;
-            maxArea = max(maxArea, newArea);
+            stack.push({start, heights[i]});      
         }
-        
+
+
+        while(!stack.empty()){
+            pair<int, int> p = stack.top();
+            stack.pop();
+            maxArea = max(maxArea, p.second * (len - p.first));
+        }
+
+
+        //Method 2 : brute Force apporach give TLE
+        for(int i = 0; i < heights.size(); i++){
+            int currMin = heights[i];
+            globalMin = min(globalMin, heights[i]);
+
+            for(int j = i; j >=0; j--){
+                currMin = min(currMin, heights[j]);
+                
+                int currArea;
+
+                if(currMin == globalMin){
+                    currArea = (i+1) * globalMin;
+                    maxArea = max(maxArea, currArea);
+                    //cout<<i<<"-"<<j<<":"<<maxArea<<endl;
+                    break;
+                }
+                else{
+                    currArea = (i-j+1) * currMin;
+                    maxArea = max(maxArea, currArea);
+                    //cout<<i<<"-"<<j<<":"<<maxArea<<endl;
+                }
+                
+            }
+        }
 
         return maxArea;
     }
