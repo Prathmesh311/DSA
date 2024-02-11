@@ -1,27 +1,26 @@
 class Solution {
 public:
     bool isValidSudoku(vector<vector<char>>& board) {
-        map<char, set<char>> rows;
-        map<char, set<char>> cols;
-        map<string, set<char>> squares;
+        vector<vector<int>> rows(9, vector<int>(10, 0));
+        vector<vector<int>> cols(9, vector<int>(10, 0));
+        vector<vector<vector<int>>> blocks(3, vector<vector<int>>(3, vector<int>(10, 0)));
 
-        for(int r=0; r < board.size(); r++){
-            for(int c=0; c < board[0].size(); c++){
-                if(board[r][c] == '.'){
+        
+        for(int i=0; i < board.size(); i++){
+            for(int j=0; j < board[0].size(); j++){
+                if(board[i][j] == '.'){
                     continue;
                 }
 
-                string squareKey = to_string(int(r)/3) + to_string(int(c)/3);  //creating key for 3*3 square
+                int currNum = board[i][j] - '0';
                 
-                if(rows[r].find(board[r][c]) != rows[r].end() || 
-                    cols[c].find(board[r][c]) != cols[c].end() ||
-                    squares[squareKey].find(board[r][c]) != squares[squareKey].end()){  //checking if num is present in previously in row, col or 3*3 square
+                if(rows[i][currNum] || cols[j][currNum] || blocks[i/3][j/3][currNum]){
                     return false;
+                }else{
+                    rows[i][currNum] = 1;
+                    cols[j][currNum] = 1;
+                    blocks[i/3][j/3][currNum] = 1;
                 }
-
-                rows[r].insert(board[r][c]);                 //adding new number to row, col, and 3*3 square
-                cols[c].insert(board[r][c]);
-                squares[squareKey].insert(board[r][c]);
             }
         }
 
