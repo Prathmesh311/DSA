@@ -79,7 +79,6 @@ public:
              Node* tailPrev = tail->prev;
             remove(tailPrev);
             map.erase(tailPrev->k);
-            delete tailPrev;
         }
         
         //Add new node at front (after head)
