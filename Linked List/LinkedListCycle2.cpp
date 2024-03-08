@@ -22,4 +22,32 @@ public:
         }
         return NULL;
     }
+
+    //Method 2: using fast and slow pointer
+    ListNode *detectCycle(ListNode *head) {
+        if(head == NULL){
+            return NULL;
+        }
+
+        ListNode* slow = head;
+        ListNode* fast = head;
+
+
+        while(fast != NULL && fast->next != NULL){
+            fast = fast->next->next;
+            slow = slow->next;
+
+            if(fast == slow){
+                slow = head;
+               
+                while(slow != fast){
+                    slow = slow->next;
+                    fast = fast->next;
+                }
+                return slow;
+            }
+        }
+        return NULL;   
+        
+    }
 };
