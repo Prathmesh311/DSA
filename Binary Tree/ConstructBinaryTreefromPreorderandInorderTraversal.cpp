@@ -11,33 +11,33 @@
  */
 class Solution {
 public:
-    TreeNode* buildTreeFromTraversal(vector<int>& preorder, vector<int>& inorder, int &i, int s, int e){
-
-        if(i >= preorder.size() || s > e){
+    TreeNode* constructTree(vector<int> &preorder, vector<int> &inorder, int &index, int left, int right){
+        if(index >= preorder.size() || left > right){
             return NULL;
         }
 
-        int element = preorder[i];
-        TreeNode* root = new TreeNode(element);
+        TreeNode* node = new TreeNode(preorder[index]);
 
-        int index = -1;
-        for(int j=0; j < preorder.size(); j++){
-            if(inorder[j] == element){
-                index = j;
+        int divideIndex = -1;
+        for(int i = left; i <= right; i++){
+            if(inorder[i] == preorder[index]){
+                divideIndex = i;
                 break;
             }
         }
-
-        i++;
-        root->left = buildTreeFromTraversal(preorder, inorder, i, s, index-1);
-        root->right = buildTreeFromTraversal(preorder, inorder, i, index+1, e);
-
-        return root;
+        index++;
+        
+        if(divideIndex != -1){
+            node->left = constructTree(preorder, inorder, index, left, divideIndex-1);
+            node->right = constructTree(preorder, inorder, index, divideIndex+1, right);
+        }
+        
+        return node;
     }
 
+
     TreeNode* buildTree(vector<int>& preorder, vector<int>& inorder) {
-        int i = 0;
-        TreeNode* root = buildTreeFromTraversal(preorder, inorder, i, 0, inorder.size()-1);
-        return root;
+        int index = 0;
+        return constructTree(preorder, inorder, index, 0, preorder.size()-1);
     }
 };
