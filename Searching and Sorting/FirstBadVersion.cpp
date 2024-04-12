@@ -4,26 +4,20 @@
 class Solution {
 public:
     int firstBadVersion(int n) {
-        int start = 1;
-        int end = n;
+        int left = 1;
+        int right = n;
+        
 
-        while(start <= end){
-            int mid = start + (end - start)/2;
+        while(left < right){
+            int mid = left + (right-left)/2;
 
-            bool curr = isBadVersion(mid);
-            bool prev = isBadVersion(mid-1);
-           
-            if(curr == 1 && prev == 0 && mid-1 > 0){
-                return mid;
-            }
-            else if(curr == false){
-                start = mid+1;
-            }
-            else{
-                end = mid-1;
+            if(isBadVersion(mid)){
+                right = mid;
+            }else{
+                left = mid + 1;
             }
         }
 
-        return 1;
+        return left;
     }
 };
