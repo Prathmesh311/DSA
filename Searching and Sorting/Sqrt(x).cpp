@@ -1,26 +1,26 @@
 class Solution {
 public:
     int mySqrt(int x) {
-        long sRoot;
+        if(x == 0 || x == 1){
+            return x;
+        }
+        
+        long square = x;
 
-        long start = 0;
-        long end = (long)x;
+        long left = 0;
+        long right = x;
 
-        while(start <= end){
-            long mid = start +  (end - start) / 2;
 
-            long midSquare = mid * mid;
-            if(midSquare == (long)x){
-                return mid;
-            }
-            else if(midSquare < (long)x){
-                sRoot = mid;
-                start = mid + 1;
-            }
-            else{
-                end = mid-1;
+        while(left < right){
+            long mid = left + (right - left)/2;
+
+            if(mid * mid > square){
+                right = mid;
+            }else{
+                left = mid + 1;
             }
         }
-        return (int)sRoot;
+
+        return (int)left-1;
     }
 };
