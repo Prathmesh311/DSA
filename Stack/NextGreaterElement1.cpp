@@ -1,37 +1,26 @@
 class Solution {
 public:
     vector<int> nextGreaterElement(vector<int>& nums1, vector<int>& nums2) {
-        vector<int> nextGreater(nums2.size());
-        vector<int> ans(nums1.size());
+        stack<int> stack;
+        unordered_map<int, int> map;
 
-        stack<int> s;
-       
-        for(int i=nums2.size()-1; i >= 0; i--){
-            int curr = nums2[i];
-            while(!s.empty() && s.top() <= curr){    //poping stack until next greater element found
-                s.pop();
+        for(int i=0; i < nums2.size(); i++){
+            while(!stack.empty() && nums2[stack.top()] < nums2[i]){
+                int topIndex = stack.top();
+                stack.pop();
+
+                map[nums2[topIndex]] = nums2[i];
             }
 
-            if(s.empty()){
-                nextGreater[i] = -1;
-            }else{
-                nextGreater[i] = s.top();
-            }
-
-            s.push(curr);                           
+            stack.push(i);
         }
 
-        //Aligning ans format
-        for(int i=0; i < nums1.size(); i++){
-            for(int j=0; j < nums2.size(); j++){
-                if(nums1[i] == nums2[j]){
-                    ans[i] = nextGreater[j];
-                }
-            }
-           
+        vector<int> ans;
+        for(int num : nums1){
+            int nextGreater = map[num] != 0 ? map[num] : -1;
+            ans.push_back(nextGreater);
         }
-       
+
         return ans;
-      
     }
 };
