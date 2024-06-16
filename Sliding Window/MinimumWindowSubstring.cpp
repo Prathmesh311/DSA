@@ -1,48 +1,38 @@
 class Solution {
 public:
     string minWindow(string s, string t) {
-        unordered_map<char, int> mapT;
-        unordered_map<char, int> mapS;
-        int minLen = INT_MAX;
+        unordered_map<char, int> map;
+
+        int minWindow = INT_MAX;
+
+        int counter = t.size();
+        int start = 0;
+        int head = 0;
 
         for(char c : t){
-            mapT[c]++;
+            map[c] += 1;
         }
 
-        int left = 0;
-        int start = 0;
-        int end = INT_MAX;
-
-        int have = 0;
-        int need = mapT.size();
-
-        for(int right=0; right < s.size(); right++){
-            char c = s[right];
-
-            if(mapT.find(c) != mapT.end()){
-                mapS[c]++;
-                if(mapS[c] == mapT[c]){
-                    have++;
-                }
+        for(int end = 0; end < s.size(); end++){
+            if(map[s[end]] > 0){
+                counter--;
             }
-           
-            while(have == need && left <= right){
-                if(right - left + 1 < minLen){
-                    minLen = min(minLen, right-left+1);
-                    start = left;
-                    end = right+1;
+            map[s[end]]--;
+
+            while(counter == 0){
+                if(end - start < minWindow){
+                    minWindow = min(end - start, minWindow);
+                    head = start;
                 }
-                
-                if(mapT.find(s[left]) != mapT.end()){
-                    mapS[s[left]]--;
-                    if(mapS[s[left]] < mapT[s[left]]){
-                        have--;
-                    }
+
+                map[s[start]]++; 
+                if (map[s[start]] > 0) {
+                    counter++;
                 }
-                left++;
+                start++;
             }
         }
-        
-        return end - start < INT_MAX ? s.substr(start, end-start) : "";
+
+        return minWindow == INT_MAX ? "" : s.substr(head, minWindow+1);
     }
 };
