@@ -1,21 +1,24 @@
 class Solution {
 public:
     int characterReplacement(string s, int k) {
-        int ans = 0;
         unordered_map<char, int> map;
+        
+        int maxLen = 0;
+        int left = 0;
+        int maxCount = 0;
 
-        int maxF = 0;
+        for(int right = 0; right < s.size(); right++){
+            map[s[right]] += 1;
+            maxCount = max(maxCount, map[s[right]]);
 
-        for(int i=0; i < s.size(); i++){
-            maxF = max(maxF, ++map[s[i]]);
-
-            if(ans - maxF < k){
-                ans++;
+            if(right - left + 1 - maxCount > k){
+                map[s[left]] -= 1;  
+                left++;
             }
-            else{
-                map[s[i - ans]]--;
-            }
+
+            maxLen = max(maxLen, right - left + 1);
         }
-        return ans;
+
+        return maxLen;
     }
 };
