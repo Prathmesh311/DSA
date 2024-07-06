@@ -1,37 +1,30 @@
 class Solution {
 public:
-    int subarraysWithKDistinct(vector<int>& nums, int k) {
-        unordered_map<int, int> count;
+     int atMost(vector<int> &nums, int k){
+        unordered_map<int, int> map;
+       
+        int subArrays = 0;
+        int left = 0;
 
-        int leftNear = 0;
-        int leftFar = 0;
-        int ans = 0;
+        for(int right = 0; right < nums.size(); right++){
+            map[nums[right]] += 1;  
 
+            while(left <= right && map.size() > k){
+                map[nums[left]] -= 1; 
 
-        for(int r = 0; r < nums.size(); r++){
-            count[nums[r]] += 1;
-
-            //if extra element present
-            while(count.size() > k){
-                count[nums[leftNear]] -= 1;
-                if(count[nums[leftNear]] == 0){
-                    count.erase(nums[leftNear]);
+                if(map[nums[left]] == 0){
+                    map.erase(nums[left]);
                 }
-                leftNear++;
-                leftFar = leftNear;
+                left++;
             }
 
-            //if 
-            while(count[nums[leftNear]] > 1){
-                count[nums[leftNear]] -= 1;
-                leftNear++;
-            }
-
-            if(count.size() == k){
-                ans += leftNear - leftFar + 1;
-            }
+            subArrays += right - left + 1;
         }
 
-        return ans;
+        return subArrays;
+    }
+
+    int subarraysWithKDistinct(vector<int>& nums, int k) {
+        return atMost(nums, k) - atMost(nums, k-1);
     }
 };
