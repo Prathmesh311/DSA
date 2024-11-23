@@ -1,62 +1,81 @@
-#include <iostream>
-#include <set>
- 
+/*
+
+words = ["acd", "adr", "cdb"]
+o/p = "acdbr"
+
+adj = {{a, [c, d]}, {c, [d]}, {d, [r, b]}, {r, [b]}}
+indegree = {{a, 0}, {c, 1}, {}}
+
+Implementation;
+    -> create adj map
+    -> crate inDegree
+    -> do BFS (using Topological sort)
+    -> if Possible to visit all return result / return ""
+*/
+
+
 class Solution {
 public:
-    bool dfs(map<char, set<char>> &adj, vector<char> &dict, map<char, bool> &visited, char c){
-        if(visited.find(c) != visited.end()){
-            return visited[c];
-        }
+    string alienOrder(vector<string>& words) {
+        unordered_map<char, vector<char>> adj;
+        unordered_map<char, int> indegree;
+        queue<char> q;
+        string result = "";
 
-        visited[c] = true;
-
-        for(char nextC : adj[c]){
-            if(dfs(adj, dict, visited, nextC)){
-                return true;
-            }
-        }
-
-        visited[c] = false;
-        dict.push_back(c);
-
-        return false;
-    }
-
-    string alienDictionary(vector<string>& words) {
-        map<char, std::set<char>> adj;
-        map<char, bool> visited;
-        vector<char> dict;
-
-        for(int i=0; i < words.size()-1; i++){
-            string word1 = words[i];
-            string word2 = words[i+1];
-
-            int minLen = min(word1.size(), word2.size());
-
-            if(word1.size() > word2.size() && word1.substr(0, minLen) == word2.substr(0, minLen)){
-                return "";
-            }
-
-            for(int j = 0; j < minLen; j++){
-                if(word1[j] != word2[j]){
-                    adj[word1[j]].insert(word2[j]);
-                    break;
+        for(string word : words){
+            for(char c : word){
+                if(indegree.find(c) == indegree.end()){
+                    indegree[c] = 0;
                 }
             }
         }
 
-        for(auto p : adj){
-            if(dfs(adj, dict, visited, p.first)){
+        for(int i=0; i < words.size()-1; i++){
+            int j = 0;
+            for(; j < words[i].size() && j < words[i+1].size(); j++){
+                if(words[i][j] != words[i+1][j]){
+                   adj[words[i][j]].push_back(words[i+1][j]);
+                   indegree[words[i+1][j]] += 1;
+                   break;
+                }
+            }
+
+            if(j >= words[i+1].size() && j < words[i].size()){
                 return "";
             }
         }
 
-        string ans = "";
-
-        for(int i = dict.size()-1; i >=0; i--){
-            ans += dict[i];
+        for(auto p : indegree){
+            if(p.second == 0){
+                q.push(p.first);
+            }
         }
 
-        return ans;
+        while(!q.empty()){
+            int size = q.size();
+
+            for(int i=0; i < size; i++){
+                char c = q.front();
+                q.pop();
+
+                result += c;
+
+                for(char next : adj[c]){
+                    indegree[next] -= 1;
+
+                    if(indegree[next] == 0){
+                        q.push(next);
+                    }
+                }
+            }
+        }
+
+        for(auto p : indegree){
+            if(p.second > 0){
+                return "";
+            }
+        }
+
+        return result;
     }
 };
