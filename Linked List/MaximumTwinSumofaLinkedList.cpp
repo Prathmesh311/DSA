@@ -11,33 +11,35 @@
 class Solution {
 public:
     int pairSum(ListNode* head) {
-        ListNode* node = head;
-        map<int, int> map;
-        int index = 0;
-        int len = 0;
+        ListNode* fast = head;
+        ListNode* slow = head;
 
-        while(node != NULL){
-            len++;
-            node = node->next;
+        while(fast != NULL && fast->next != NULL){
+            fast = fast->next->next;
+            slow = slow->next;
         }
+
+
+        ListNode* prevNode = NULL;
+
+        while(slow != NULL){
+            ListNode* nextNode = slow->next;
+            slow->next = prevNode;
+            prevNode = slow;
+            slow = nextNode;
+        }
+
+        ListNode* secondHead = prevNode;
+        ListNode* firstHead = head;
         
-        node = head;
-        while(node != NULL){
-            if(index < len/2){
-                int pos = len - 1 - index;
-                map[pos] = node->val;
-            }else{
-                map[index] = map[index] + node->val;
-            }
-
-            node= node->next;
-            index++;
+        int maxSum= 0;
+        while(secondHead != NULL){
+            maxSum = max(maxSum, (secondHead->val + firstHead->val));
+            secondHead = secondHead->next;
+            firstHead = firstHead->next;
         }
 
-        int maxTwin = 0;
-        for(auto p: map){
-            maxTwin = max(maxTwin, p.second);
-        }
-        return maxTwin;
+
+        return maxSum;
     }
 };
