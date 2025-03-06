@@ -1,34 +1,38 @@
 class Solution {
 public:
-    //Dijktra's Algo
     int swimInWater(vector<vector<int>>& grid) {
-        vector<vector<int>> time(grid.size(), vector<int>(grid[0].size(), INT_MAX));
-        queue<pair<int, int>> q;
+        priority_queue<vector<int>, vector<vector<int>>, greater<vector<int>>> pq;
+        vector<vector<int>> visited(grid.size(), vector<int>(grid[0].size(), 0));
+        int maxVal = 0;
 
+        pq.push({grid[0][0], 0, 0});
 
-        time[0][0] = grid[0][0];
-        q.push({0, 0});
+        vector<vector<int>> direc = {{-1,0}, {0,-1}, {1,0}, {0,1}};
+        while(!pq.empty()){
+            vector<int> v = pq.top();
+            pq.pop();
 
+            int row = v[1];
+            int col = v[2];
 
-        vector<vector<int>> directions = {{-1,0}, {0,-1}, {1,0}, {0,1}};
-        while(!q.empty()){
-            pair<int, int> p = q.front();
-            q.pop();
-            int row = p.first;
-            int col = p.second;
+            maxVal = max(maxVal, v[0]);
+            visited[row][col] = 1;
 
-            for(auto v : directions){
-                int nextRow = row + v[0];
-                int nextCol = col + v[1];
+            if(row == grid.size()-1 && col == grid[0].size()-1){
+                return maxVal;
+            }
+
+            for(auto d : direc){
+                int nextRow = row + d[0];
+                int nextCol = col + d[1];
 
                 if(nextRow < grid.size() && nextCol < grid[0].size() && nextRow >= 0 && nextCol >= 0 &&
-                    time[nextRow][nextCol] > time[row][col]){
-                        time[nextRow][nextCol] = max(time[row][col], grid[nextRow][nextCol]);
-                        q.push({nextRow, nextCol});
+                    visited[nextRow][nextCol] == 0){
+                        pq.push({grid[nextRow][nextCol], nextRow, nextCol});
                     }
             }
         }
 
-        return time[grid.size()-1][grid[0].size()-1];
+        return maxVal;
     }
 };
